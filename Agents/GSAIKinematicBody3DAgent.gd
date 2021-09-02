@@ -94,7 +94,7 @@ func _apply_position_steering(accel: Vector3, delta: float) -> void:
 		velocity = velocity.linear_interpolate(
 			Vector3.ZERO, linear_drag_percentage
 		)
-	_body.global_position += velocity * delta
+	_body.global_transform.origin += velocity * delta
 	if calculate_velocities:
 		linear_velocity = velocity
 
@@ -130,6 +130,9 @@ func _set_body(value: KinematicBody) -> void:
 func _on_SceneTree_physics_frame() -> void:
 	var _body: KinematicBody = _body_ref.get_ref()
 	if not _body:
+		return
+
+	if not _body.is_inside_tree():
 		return
 
 	var current_position := _body.transform.origin
